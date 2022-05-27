@@ -1,0 +1,970 @@
+# 面试题
+
+## HTML
+
+### HTML语义化
+
+根据内容的结构化（内容语义化），选择合适的标签（代码语义化）便于开发者阅读和写出更优雅的代码的同时让浏览器的[爬虫](https://so.csdn.net/so/search?q=爬虫&spm=1001.2101.3001.7020)和机器很好的解析。
+
+### 什么是viewport？
+
+Viewprot是用户网页的可视区域。
+
+Viewprot翻译为中文可以叫做“视区”。
+
+手机浏览器是把页面房子啊一个虚拟的“窗口（viewport）”比屏幕宽，这样就不用把每个网页挤到很小的窗口中（这样会破坏没有针对手机浏览器优化的网页的布局），用户可以通过平移和缩放来看网页的不同部分；
+
+个人理解部分：
+
+浏览器就想一个盒子一样，pc的浏览器和手机浏览器屏幕是不同尺寸大小。同样一套尺寸网页在pc上可以正常浏览，如果没有viewport定义浏览器的尺寸，想pc尺寸一样在手机浏览器上显示，布局可能就乱掉，或者先尺寸比例非常的不协调。
+
+```
+<mate name='viewport' content='width=device-width;initial-scale=1.0;maximum-scale=1;user-scalable=no'>
+```
+
+
+
+## CSS
+
+### 盒子模型
+
+盒模型分为标准盒模型和怪异盒模型(IE模型) **关键属性border-sizing**
+
+box-sizing：content-box   //标准盒模型 
+
+元素的宽度等于style里的width+margin+border+padding宽度
+
+box-sizing：border-box    //怪异盒模型
+
+元素宽度等于style里的width宽度
+
+### css选择器
+
+文档https://www.w3school.com.cn/cssref/css_selectors.asp、
+
+### 选择器权重
+
+!important -> 行内样式 -> #id -> .class -> 元素和伪元素 -> * -> 继承 -> 默认
+
+ **!important**，作用是**提高指定样式规则的应用优先权（优先级）**
+
+```
+div { color: #f00 !important; }
+```
+
+**继承**：CSS的继承就是给父级设定了属性，这个父级和它的子级都具有这个属性
+
+```
+<div class="fuji">
+<div class="ziji">我是子级</div>
+</div>
+```
+
+
+
+### 什么是伪元素？
+
+CSS 伪元素用于设置元素指定部分的样式。
+
+例如，它可用于：
+
+设置元素的首字母、首行的样式
+
+在元素的内容之前或之后插入内容
+
+例如::first-line 伪元素
+
+`::first-line` 伪元素用于向文本的首行添加特殊样式。
+
+下面的例子为所有 <p> 元素中的首行添加样式：
+
+**实例**
+
+```
+p::first-line {
+  color: #ff0000;
+  font-variant: small-caps;
+}
+```
+
+#### 伪元素和伪类
+
+文档https://blog.csdn.net/weixin_46193778/article/details/113859599
+
+### css新特性
+
+transition：过渡
+transform：旋转、缩放、移动或者倾斜
+animation：动画
+gradient：渐变
+shadow：阴影
+border-radius：圆角
+
+**行内元素（display: inline）**
+
+宽度和高度是由内容决定，与其他元素共占一行的元素，我们将其叫行内元素，例如：` 、  、 `等
+
+**块级元素（display: block)**
+
+默认宽度由父容器决定，默认高度由内容决定，独占一行并且可以设置宽高的元素，我们将其叫做块级元素，例如：` 、 、等`
+
+在平时，我们经常使用CSS的display: inline-block，使它们拥有更多的状态
+
+### 绝对定位和相对定位的区别
+
+**position: absolute**
+绝对定位：是相对于元素最近的已定位的祖先元素
+
+**position: relative**
+相对定位：相对定位是相对于元素在文档中的初始位置
+
+
+
+### 什么是flex布局？
+
+意味"弹性布局"，任何一个容器都可以指定为Flex布局
+
+文档https://juejin.cn/post/6844903906925887502
+
+## JS
+
+### link与@import区别与选择
+
+link功能较多，可以定义 RSS，定义 Rel 等作用，而@import只能用于加载 css；
+
+当解析到link时，页面会同步加载所引的 css，而@import所引用的 css 会等到页面加载完才被加载；
+
+@import需要 IE5 以上才能使用；
+
+link可以使用 js 动态引入，@import不行
+
+### JS的基本数据类型
+
+Undefined、Null、Boolean、Number、String、新增:Symbol
+
+### 数组操作
+
+```
+map: 遍历数组，返回回调返回值组成的新数组
+forEach: 无法break，可以用try/catch中throw new Error来停止
+filter: 过滤 产生新数组
+some: 有一项返回true，则整体为true
+every: 有一项返回false，则整体为false
+join: 通过指定连接符（默认，号）生成字符串
+push / pop: 末尾推入和弹出，改变原数组， 返回推入/弹出项【有误】
+unshift / shift: 头部推入和弹出，改变原数组，返回操作项【有误】
+sort(fn) / reverse: 排序与反转，改变原数组
+concat: 连接数组，不影响原数组，返回新数组 浅拷贝
+slice(start, end): 返回截断后的新数组，不改变原数组
+splice(start, number, value...): 返回删除元素组成的数组，value 为插入项，改变原数组
+indexOf / lastIndexOf(value, fromIndex): 查找数组项，返回对应的下标
+reduce / reduceRight(fn(prev, cur)， defaultPrev): 两两执行，prev 为上次化简函数的return值，cur 为当前值(从第二项开始)
+
+```
+
+### JS有哪些内置对象
+
+Object是JavaScript中所有对象的父对象
+
+数据封装对象：Object、Array、Boolean、Number和String
+其他对象：Function、Arguments、Math、Date、RegExp、Error
+
+### 闭包
+
+函数A 里面包含了 函数B，而 函数B 里面使用了 函数A 的变量，那么 函数B 被称为闭包。
+
+又或者：闭包就是能够读取其他函数内部变量的函数
+
+```
+function A() {
+  var a = 1;
+  function B() {
+    console.log(a);
+  }
+  return B();
+}
+
+```
+
+#### **闭包的特征**
+
+函数内再嵌套函数
+
+内部函数可以引用外层的参数和变量
+
+参数和变量不会被垃圾回收制回收
+
+#### **对闭包的理解**
+
+使用闭包主要是为了设计私有的方法和变量。闭包的优点是可以避免全局变量的污染，缺点是闭包会常驻内存，会增大内存使用量，使用不当很容易造成内存泄露。在js中，函数即闭包，只有函数才会产生作用域的概念
+
+闭包 的最大用处有两个，一个是可以读取函数内部的变量，另一个就是让这些变量始终保持在内存中
+
+闭包的另一个用处，是封装对象的私有属性和私有方法
+
+#### **闭包的好处**
+
+能够实现封装和缓存等
+
+#### **闭包的坏处**
+
+就是消耗内存、不正当使用会造成内存溢出的问题
+
+#### **使用闭包的注意点**
+
+由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在IE中可能导致内存泄露
+
+解决方法是：在退出函数之前，将不使用的局部变量全部删除 **赋值为null**
+
+#### 常见问题
+
+```
+for(var i = 0; i < 3; i++) {
+  setTimeout(function() {
+    console.log(i);
+  }, 1000);
+}
+
+答案：3个3
+解析：首先，for 循环是同步代码，先执行三遍 for，i 变成了 3；然后，再执行异步代码 setTimeout，这时候输出的 i，只能是 3 个 3 了
+
+有什么办法依次输出0 1 2
+Ⅰ for(let i = 0; i < 3; i++) {
+  setTimeout(function() {
+    console.log(i);
+  }, 1000);
+}
+在这里，每个 let 和代码块结合起来形成块级作用域，当 setTimeout() 打印时，会寻找最近的块级作用域中的 i，所以依次打印出 0 1 2
+
+Ⅱ 
+for(let i = 0; i < 3; i++) {
+  (function(i){
+    setTimeout(function() {
+      console.log(i);
+    }, 1000);
+  })(i)
+}
+匿名函数自调用
+
+
+
+```
+
+### 内存泄露和内存溢出
+
+#### 内存溢出
+
+一种程序运行出现的错误
+
+当程序运行需要的内存超过了剩余的内存，就会抛出内存溢出的错误
+
+#### 内存泄漏
+
+占用的内存没有及时释放
+
+内存泄露积累多了就容易内存溢出
+
+常见的内存泄露
+
+​	意外的全局变量
+
+​	没有及时清理的计时器或者回调函数
+
+​	闭包
+
+### 回调函数
+
+被作为实参传入另一函数，并在该外部函数内被调用，用以完成某些任务的函数，称为回调函数
+
+**人话：**说人话就是， 一个函数A，作为另一个函数B的参数，那么函数A就被称为回调函数。
+
+```
+function a(callback){
+	a = 2
+	callback(2)
+}
+function b(i){
+	console.log(i)
+}
+
+a(b)
+```
+
+**称b函数是a函数的回调函数**
+
+### JS作用域及作用域链
+
+#### 作用域
+
+在JavaScript中，作用域分为 全局作用域 和 函数作用域
+
+全局作用域 代码在程序的任何地方都能被访问，window 对象的内置属性都拥有全局作用域
+
+函数作用域 在固定的代码片段才能被访问
+
+ ![cmd-markdown-logo](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/9/16/16d382c7d68e17ae~tplv-t2oaga2asx-zoom-in-crop-mark:1304:0:0:0.awebp)
+
+作用域有上下级关系，上下级关系的确定就看函数是在哪个作用域下创建的。如上，fn作用域下创建了bar函数，那么“fn作用域”就是“bar作用域”的上级。
+
+
+
+作用域最大的用处就是隔离变量，不同作用域下同名变量不会有冲突。
+
+变量取值：到创建 这个变量 的函数的作用域中取值
+
+#### **作用域链**‘
+
+一般情况下，变量取值到 创建 这个变量 的函数的作用域中取值。
+
+但是如果在当前作用域中没有查到值，就会向上级作用域去查，直到查到全局作用域，这么一个查找过程形成的链条就叫做作用域链
+
+![cmd-markdown-logo](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/9/16/16d3830bf3cf1ebf~tplv-t2oaga2asx-zoom-in-crop-mark:1304:0:0:0.awebp)
+
+### 原型和原型链
+
+#### **原型**  
+
+每个对象都会在其内部初始化一个属性，就是prototype(原型)，
+
+#### 原型链 
+
+每个构造函数都有一个原型对象，原型对象都包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针。那么假如我们让原型对象等于另一个类型的实例，结果会怎样？显然，此时的原型对象将包含一个指向另一个原型的指针，相应地，另一个原型中也包含着一个指向另一个构造函数的指针。假如另一个原型又是另一个类型的实例，那么上述关系依然成立。如此层层递进，就构成了实例与原型的链条。
+
+> ![image-20220523131632453](C:\Users\tdc520\AppData\Roaming\Typora\typora-user-images\image-20220523131632453.png)
+
+**文字术语**
+
+person构造函数的显式原型指向person的原型对象，person实例的隐式原型指向person的原型对象，以此类推.....
+
+### 组件化和模块化
+
+#### **模块化的好处**
+
+- 避免变量污染，命名冲突
+- 提高代码复用率
+- 提高了可维护性
+- 方便依赖关系管理
+
+### 图片的预加载和懒加载
+
+- 预加载：提前加载图片，当用户需要查看时可直接从本地缓存中渲染
+- 懒加载：懒加载的主要目的是作为服务器前端的优化，减少请求数或延迟请求数
+
+### mouseover和mouseenter的区别
+
+mouseover：当鼠标移入元素或其子元素都会触发事件，所以有一个重复触发，冒泡的过程。对应的移除事件是mouseout
+
+mouseenter：当鼠标移除元素本身（不包含元素的子元素）会触发事件，也就是不会冒泡，对应的移除事件是mouseleave
+
+### 异步回调地狱
+
+```
+ api.getCatalogue({id:id}).then((res)=>{
+   if(res && res.code==200){
+      api.getWattHourMeter({id:res.data.id}).then((res)=>{
+        if(res && res.code==200){
+          api.getConsumption({id:res.data.id}).then((res)=>{
+            if(res && res.code==200){
+                //逻辑操作
+            }
+	      })
+	    }
+	  })
+    }
+  })
+```
+
+这样一层包一层就像是18层地狱一样，因此这种现象被称作回调地狱
+
+#### **解决回调地狱**  
+
+**语法糖  async/await** 
+
+**生成器函数 generator** 
+
+Promise 解决
+
+### 生成器函数generator
+
+```
+function* A(){
+ yieled '1';
+ console.log('11')
+  yieled '2';
+ console.log('22')
+  yieled '3';
+ console.log('33')
+}
+
+A().next()  输出11
+A().next()  输出22
+A().next()  输出33
+
+for(let v of gen()){
+	console.log(v)
+}
+输出 1 2 3 
+```
+
+### 对This对象的理解
+
+this总是指向函数的直接调用者（而非间接调用者）
+
+如果有new关键字，this指向new出来的那个对象
+
+在事件中，this指向触发这个事件的对象，特殊的是，IE中的attachEvent中的this总是指向全局对象Window
+
+**attachEvent**:    为某一事件附加其它的处理事件。
+
+```
+document.getElementById("btn").onclick = method1;
+document.getElementById("btn").onclick = method2;
+document.getElementById("btn").onclick = method3;如果这样写,那么将会只有medhot3被执行
+
+写成这样：
+btn1Obj = document.getElementById("btn1");  //object.attachEvent(event,function);
+btn1Obj.attachEvent("onclick",method1);
+btn1Obj.attachEvent("onclick",method2);
+btn1Obj.attachEvent("onclick",method3);执行顺序为method3->method2->method1
+```
+
+
+
+## HTTP网络
+
+### GET和POST区别
+
+get用来获取数据，post用来提交数据
+
+get参数有长度限制（受限于url长度，具体的数值取决于浏览器和服务器的限制，最长2048字节），而post无限制。
+
+get请求的数据会附加在url之 ，以 " ？ "分割url和传输数据，多个参数用 "&"连接，而post请求会把请求的数据放在http请求体(res.body)中。
+
+get是明文传输，post是放在请求体中，但是开发者可以通过抓包工具看到，也相当于是明文的。
+
+get请求会保存在浏览器历史记录中，还可能保存在web服务器的日志中
+
+**首先get和post在本质上都是tcp链接，但由于http协议和浏览器或者服务器的限制，从而使它们在应用过程中产生了差别，但是它们中还有一个较大的区别：get在请求时发送一个数据包，会将header和data一起发送过去，而post会产生两个数据包先发送header，服务器返回100，然后在发送data，服务器返回200**
+
+### get请求传参长度的误区
+
+误区：我们经常说get请求参数的大小存在限制，而post请求的参数大小是无限制的
+
+实际上HTTP 协议从未规定 GET/POST 的请求长度限制是多少。**对get请求参数的限制是来源与浏览器或web服务器，浏览器或web服务器限制了url的长度。**为了明确这个概念，我们必须再次强调下面几点:
+
+1、HTTP 协议 未规定 GET 和POST的长度限制
+
+2、GET的最大长度显示是因为 浏览器和 web服务器限制了 URI的长度
+
+3、不同的浏览器和WEB服务器，限制的最大长度不一样
+
+### get和post请求在缓存方面的区别
+
+get请求类似于查找的过程，用户获取数据，可以不用每次都与数据库连接，所以可以使用缓存。
+
+**缓存是指这里是数据会被前端缓存,当浏览器发了一条请求，会返回数据，浏览器会把返回的数据记录下来。**
+
+**当你再次发送该请求的时候，浏览器并不真的再发送这条请求，而是从历史记录里把这个数据读取取出来，这叫做缓存。这是浏览器自己的决策，后端并不知道也没有收到任何请求。**
+
+**可被缓存意思是根据相应的 HTTP 缓存协议规则，浏览器可以达到缓存结果的目的，不是说任何 get 请求都会被浏览器缓存**
+
+post不同，post做的一般是修改和删除的工作，所以必须与数据库交互，所以不能使用缓存。因此get请求适合于请求缓存。
+
+### 如何解决跨域
+
+1. 后端设置响应头或者使用cors插件，默认允许所有跨域，可以配置orgin字段指定域名
+2. 配置服务端，Nginx配置文件修改
+3. 代理服务器 像vue脚手架中vue.config.js中配置devServer
+4. 4jsonp，不建议，存在安全隐患，不适合react、vue等框架的开发，且只 支持get请求
+
+### 同步和异步的区别（网络请求）
+
+**同步：**
+
+浏览器访问服务器请求，用户看得到页面刷新，重新发请求,等请求完，页面刷新，新内容出现，用户看到新内容,进行下一步操作
+
+**异步：**
+浏览器访问服务器请求，用户正常操作，浏览器后端进行请求。等请求完，页面不刷新，新内容也会出现，用户看到新内容
+
+### Ajax
+
+Ajax是异步JavaScript和XML，用于在Web页面中实现异步数据交互
+
+#### 
+
+#### **ajax的优点**
+
+异步请求响应快，用户体验好；页面无刷新、数据局部更新；按需取数据，减少了冗余请求和服务器的负担；
+
+#### **ajax的缺点**
+
+异步回调问题、this指向问题、路由跳转back问题；对搜索引擎的支持比较弱，对于一些手机还不是很好的支持
+
+### **JSON：**
+
+是一种轻量级的数据交换格式，看着像对象，本质是字符串
+
+##### **JSON优点：**
+
+轻量级、易于人的阅读和编写，便于js解析，支持复合数据类型
+
+##### **JSON缺点：**
+
+没有XML格式这么推广的深入人心和使用广泛, 没有XML那么通用性
+
+### HTTP/HTTPS
+
+　　（1）HTTPS 协议需要到CA(电子商务认证机构)申请证书，一般免费证书很少，需要交费。
+
+　　（2）HTTP 是超文本传输协议，信息是明文传输，HTTPS 则是具有安全性的ssl加密传输协议
+
+　　（3）HTTP 和 HTTPS 使用的是完全不同的连接方式用的端口也不一样,前者是80,后者是443。
+
+　　（4）HTTP 的连接很简单,是无状态的
+
+　　（5）HTTPS 协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议 要比 HTTP 协议安全
+
+　　（6）HTTPS 内容传输经过完整性校验
+
+　　（7）HTTPS 内容经过对称加密，每个连接生成一个唯一的加密密钥
+
+　　（8）HTTPS 第三方无法伪造服务端（客户端）身份 
+
+### **常见状态码**
+
+200 - 请求成功，Ajax 接受到信息了
+400 - 服务器不理解请求
+403 - 服务器拒绝请求
+404 - 请求页面错误
+500 - 服务器内部错误，无法完成请求
+
+### 什么是DNS?
+
+DNS(Domain Name System)译为 域名系统，它是 Internet 的一项核心服务，可以将域名和IP地址相互映射的一个 [分布式](https://so.csdn.net/so/search?q=分布式&spm=1001.2101.3001.7020)数据库 ，能够让你方便的访问互联网。
+
+ DNS主要用于映射主机名和IP地址，就好像身份证对应一个人一样，当你搜索 www.baidu.com 时，域名需要发送到DNS服务器解析，然后返回服务器主机的IP地址到客户端，客户端再发送IP地址到服务器主机请求。但是DNS解析是有时间消耗的，一般一次解析需要 20 ~ 120 毫秒。
+
+## 性能优化
+
+### HTML优化
+
+```
+1、避免 HTML 中书写 CSS 代码，因为这样难以维护。
+2、使用 Viewport 加速页面的渲染。
+3、使用语义化标签，减少 CSS 代码，增加可读性和 SEO。
+4、减少标签的使用，DOM 解析是一个大量遍历的过程，减少不必要的标签，能降低遍历的次数。
+5、避免 src、href 等的值为空，因为即时它们为空，浏览器也会发起 HTTP 请求。
+6、减少 DNS 查询的次数（更改TTL值以利用DNS缓存）
+```
+
+### CSS优化
+
+```
+1、优化选择器路径：使用 .c {} 而不是 .a .b .c {}。
+2、选择器合并：共同的属性内容提起出来，压缩空间和资源开销。
+3、精准样式：使用 padding-left: 10px 而不是 padding: 0 0 0 10px。
+4、雪碧图：将小的图标合并到一张图中，这样所有的图片只需要请求一次。
+5、避免通配符：.a .b * {} 这样的选择器，根据从右到左的解析顺序在解析过程中遇到通配符 * {} 会遍历整个 DOM，性能大大损耗。
+6、少用 float：float 在渲染时计算量比较大，可以使用 flex 布局。
+7、为 0 值去单位：增加兼容性。
+8、压缩文件大小，减少资源下载负担。（比如删除空格、去掉换行、去掉多余分号等）
+```
+
+### JavaScript优化
+
+```
+1、尽可能把 <script> 标签放在 body 之后，避免 JS 的执行卡住 DOM 的渲染，最大程度保证页面尽快地展示出来
+（如果放在上面，将js包裹在$(document).ready(function(){})或者$(function(){})里面
+,或者window.onload=function(){}里面。）//不建议 额外操作
+2、尽可能合并 JS 代码：提取公共方法，进行面向对象设计等……
+3、CSS 能做的事情，尽量不用 JS 来做，毕竟 JS 的解析执行比较粗暴，而 CSS 效率更高。
+4、尽可能逐条操作 DOM，并预定好 CSs 样式，从而减少 reflow 或者 repaint 的次数。
+5、尽可能少地创建 DOM，而是在 HTML 和 CSS 中使用 display: none 来隐藏，按需显示。
+6、压缩文件大小，减少资源下载负担。
+```
+
+**对于DOM结构中的各个元素都有自己的盒子（模型），这些都需要浏览器根据各种样式（浏览器的、开发人员定义的等）来计算并根据计算结果将元素放到它该出现的位置，这个过程称之为reflow；当各种盒子的位置、大小以及其他属性，例如颜色、字体大小等都确定下来后，浏览器于是便把这些元素都按照各自的特性绘制了一遍，于是页面的内容出现了，这个过程称之为repaint。**
+
+
+
+## Vue
+
+### **什么是Vue生命周期？**
+
+Vue 实例从创建到销毁的过程，就是生命周期。也就是从开始创建、初始化数据、编译模板、挂载Dom→渲染、更新→渲染、卸载等一系列过程，我们称这是 Vue 的生命周期
+
+![](C:\Users\tdc520\Desktop\学习资料\vue\资料（含课件）\02_原理图\生命周期.png)
+
+### **Vue生命周期的作用是什么？**
+
+在vue生命周期的不同阶段通过对应的[钩子函数](https://so.csdn.net/so/search?q=钩子函数&spm=1001.2101.3001.7020)来实现组件数据管理和DOM渲染两大重要功能。
+
+### **Vue生命周期总共有几个阶段？**
+
+它可以总共分为8个阶段：创建前/后, 载入前/后,更新前/后,销毁前/销毁后
+
+### **第一次页面加载会触发哪几个钩子？**
+
+第一次页面加载时会触发 beforeCreate, created, beforeMount, mounted 这几个钩子
+
+### **DOM渲染在哪个周期中就已经完成？**
+
+DOM 渲染在 mounted 中就已经完成了
+
+### **每个生命周期适合哪些场景？**
+
+**beforeCreate：**创建前，此阶段为实例初始化之后，this指向创建的实例，此时的数据观察事件机制都未形成，不能获得DOM节点。
+data，computed，watch，methods 上的方法和数据均不能访问。
+可以在这加个loading事件。
+
+**created：**创建后，此阶段为实例已经创建，完成数据（data、props、computed）的初始化导入依赖项。
+可访问 data computed watch methods 上的方法和数据。
+初始化完成时的事件写在这里，异步请求也适宜在这里调用（请求不宜过多，避免白屏时间太长）。
+可以在这里结束loading事件，还做一些初始化，实现函数自执行。
+未挂载DOM，若在此阶段进行DOM操作一定要放在Vue.nextTick()的回调函数中。
+
+**beforeMount**：挂载前，虽然得不到具体的DOM元素，但vue挂载的根节点已经创建，下面vue对DOM的操作将围绕这个根元素继续进行。
+
+**beforeMount:**这个阶段是过渡性的，一般一个项目只能用到一两次。
+mounted：挂载，完成创建vm.$el，和双向绑定
+完成挂载DOM和渲染，可在mounted钩子函数中对挂载的DOM进行操作。
+可在这发起后端请求，拿回数据，配合路由钩子做一些事情。
+
+**beforeUpdate：**数据更新前，数据驱动DOM。在数据更新后虽然没有立即更新数据，但是DOM中的数据会改变，这是vue双向数据绑定的作用。
+可在更新前访问现有的DOM，如手动移出添加的事件监听器。
+
+**updated：**数据更新后，完成虚拟DOM的重新渲染和打补丁。
+组件DOM已完成更新，可执行依赖的DOM操作。
+注意：不要在此函数中操作数据（修改属性），会陷入死循环。
+
+**activated：**在使用vue-router时有时需要使用<keep-alive></keep-alive>来缓存组件状态，这个时候created钩子就不会被重复调用了。
+如果我们的子组件需要在每次加载的时候进行某些操作，可以使用activated钩子触发。
+
+**deactivated：**<keep-alive></keep-alive>组件被移除时使用。
+
+**beforeDestroy：**销毁前，
+可做一些删除提示，如：您确定删除xx吗？
+
+**destroyed：**销毁后，当前组件已被删除，销毁监听事件，组件、事件、子实例也被销毁。
+这时组件已经没有了，无法操作里面的任何东西了。
+
+**nextTick :** 更新数据后立即操作dom。
+
+### v-show与v-if区别
+
+v-show是css切换，通过display：none进行切换
+
+v-if是完整的销毁和重新创建
+
+v-show会在渲染的时候就生成  dom ，哪怕等于false也会占位。
+
+而v-if是在等于true的时候创建  
+
+### 插槽
+
+#### 默认插槽
+
+当子组件模板只有一个没有属性的插槽时， 父组件传入的整个内容片段将插入到插槽所在的 DOM 位置， 并替换掉插槽标签本身
+
+```
+       <child-component>
+           <template>
+                漂亮、美丽、购物、逛街
+            </template>
+         </child-component>
+         <slot>默认内容</slot>
+```
+
+#### 具名插槽
+
+```
+       <child-component>
+           <template slot="girl">
+                漂亮、美丽、购物、逛街
+            </template>
+       </child-component>
+         <slot name="girl"></slot>
+         
+```
+
+#### 作用域插槽        
+
+        <template slot-scope="a">
+                {{a}}
+              　<!-- {"name":"girl"} -->
+        </template>
+        <slot name="girl"></slot>
+### vue-router有哪几种导航钩子
+
+第一种：是全局导航钩子：router.beforeEach(to,from,next)，作用：跳转前进行判断拦截
+
+第二种：组件内的钩子
+
+第三种：单独路由独享组件
+
+### Vuex
+
+Vuex 是一个专为 Vue.js 应用程序开发的**状态管理模式 + 库**。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。
+
+Vuex有5种属性: 分别是 state、getter、mutation、action、module;
+
+#### **state**
+
+ Vuex 使用单一状态树,即每个应用将仅仅包含一个store 实例，但单一状态树和模块化并不冲突。存放的数据状态，不可以直接修改里面的数据
+
+#### **mutations**
+
+ mutations定义的方法动态修改Vuex 的 store 中的状态或数据
+
+#### **getters**
+
+ 类似vue的计算属性，主要用来过滤一些数据
+
+#### **action**
+
+ actions可以理解为通过将mutations里面处里数据的方法变成可异步的处理数据的方法，简单的说就是异步操作数据。view 层通过 store.dispath 来分发 action
+
+#### module
+
+Vuex 允许我们将 store 分割成**模块（module）**。每个模块拥有自己的 state、mutation、action、getter、甚至是嵌套子模块——从上至下进行同样方式的分割：
+
+### 你有对 Vue 项目进行哪些优化？
+
+#### **代码层面的优化**
+
+```
+v-if 和 v-show 区分使用场景
+computed 和 watch  区分使用场景
+v-for 遍历必须为 item 添加 key，且避免同时使用 v-if（设置key值，并且保证每个key值是独一无二的，这便于diff算法进行优化）
+v-for优先级高，带来性能方面的浪费（每次渲染都会先循环再进行条件判断）可通过计算属性computed提前过滤掉那些不需要显示的项。
+长列表性能优化
+事件的销毁
+图片资源懒加载
+路由懒加载
+import home from '../view/home/home' 而用 const home = ()=> import('../view/home/home')
+第三方插件的按需引入
+优化无限列表性能
+服务端渲染 SSR or 预渲染
+```
+
+**Webpack 层面的优化**
+
+```
+Webpack 对图片进行压缩
+减少 ES6 转为 ES5 的冗余代码
+提取公共代码
+模板预编译
+提取组件的 CSS
+优化 SourceMap
+构建结果输出分析
+Vue 项目的编译优化
+
+```
+
+#### **基础的 Web 技术的优化**
+
+```
+开启 gzip 压缩
+浏览器缓存
+CDN 的使用
+使用 Chrome Performance 查找性能瓶颈
+
+```
+
+## ES6
+
+### var、let、const之间的区别
+
+var声明变量可以重复声明，而let不可以重复声明
+
+var是不受限于块级的，而let是受限于块级
+
+var会与window相映射（会挂一个属性 如var a = 1，执行前 挂载一个a=undefind），而let不与window相映射
+
+var可以在声明的上面访问变量，而let有暂存死区，在声明的上面访问变量会报错
+
+const声明之后必须赋值，否则会报错
+
+const定义不可变的量，改变了就会报错
+
+const和let一样不会与window相映射、支持块级作用域、在声明的上面访问变量会报错
+
+### 解构复制
+
+#### 数组解构
+
+```
+let [a, b, c] = [1, 2, 3]   //a=1, b=2, c=3
+let [d, [e], f] = [1, [2], 3]    //嵌套数组解构 d=1, e=2, f=3
+let [g, ...h] = [1, 2, 3]   //数组拆分 g=1, h=[2, 3]
+let [i,,j] = [1, 2, 3]   //不连续解构 i=1, j=3
+let [k,l] = [1, 2, 3]   //不完全解构 k=1, l=2
+
+```
+
+#### 对象解构
+
+```
+let {a, b} = {a: 'aaaa', b: 'bbbb'}      //a='aaaa' b='bbbb'
+let obj = {d: 'aaaa', e: {f: 'bbbb'}}
+let {d, e:{f}} = obj    //嵌套解构 d='aaaa' f='bbbb'
+let g;
+(g = {g: 'aaaa'})   //以声明变量解构 g='aaaa'
+let [h, i, j, k] = 'nice'    //字符串解构 h='n' i='i' j='c' k='e'
+
+```
+
+函数参数的特性
+
+```
+function personInfo({name, age, address, gender}) {
+  console.log(name, age, address, gender)
+}
+personInfo({gender: 'man', address: 'changsha', name: 'william', age: 18})
+顺序错了也没关系
+```
+
+### **交换变量的值**
+
+```
+let a=1, b=2;
+[b, a] = [a, b]
+```
+
+### 默认参数
+
+```
+function a(a,b=1){
+	console.log(a,b)
+}
+a(1)
+```
+
+### rest参数
+
+```
+function a(a,b,..arr){
+	console.log(a,b,arr)  //输出1，2，[3，4，5,6
+}
+a(1,2,3,4,5,6)
+```
+
+### forEach、for in、for of三者区别
+
+forEach更多的用来遍历数
+
+for in 一般常用来遍历对象或json
+
+for of数组对象都可以遍历，遍历对象需要通过和Object.keys()
+
+for in循环出的是key，for of循环出的是value
+
+#### forEach
+
+```
+forEach更多的用来遍历数
+
+for in 一般常用来遍历对象或json
+
+for of数组对象都可以遍历，遍历对象需要通过和Object.keys()
+
+for in循环出的是key，for of循环出的是value
+```
+
+#### for in 
+
+循环遍历的值都是数据结构的键值
+
+```
+let obj = {a: '1', b: '2', c: '3', d: '4'}
+for (let o in obj) {
+    console.log(o)    //遍历的实际上是对象的属性名称 a,b,c,d
+    console.log(obj[o])  //这个才是属性对应的值1，2，3，4     o是变量，引用的时候用数组的写法，常量就用a.o
+}
+```
+
+#### for of 
+
+它是ES6中新增加的语法，用来循环获取一对键值对中的值
+
+```
+let arr = ['China', 'America', 'Korea']
+for (let o of arr) {
+    console.log(o) //China, America, Korea
+}
+```
+
+一个数据结构只有部署了 Symbol.iterator 属性, 才具有 iterator接口可以使用 for of循环。
+
+**哪些数据结构部署了 Symbol.iteratoer属性了呢?**
+
+- 数组 Array
+- Map
+- Set
+- String
+- arguments对象
+- Nodelist对象, 就是获取的dom列表集合
+
+**如果想让对象可以使用 for of循环怎么办?**
+
+### 箭头函数
+
+#### 使用箭头函数应注意什么？
+
+1、用了箭头函数，this就不是指向window，而是父级（指向是可变的）
+ 2、不能够使用arguments对象
+ 3、不能用作构造函数，这就是说不能够使用new命令，否则会抛出一个错误
+ 4、不可以使用yield命令，因此箭头函数不能用作 Generator 函数
+
+### set结构
+
+set是[ES6](https://so.csdn.net/so/search?q=ES6&spm=1001.2101.3001.7020)提供的一种新的数据结构。Set和Map类似，也是一组key的集合，但不存储value。而且成员key的值都是唯一的，所以在Set中，没有重复的key。
+
+```
+let s1 = new Set([1, 2, "2", 3, 4, 4, 5]);
+console.log(s1); // 返回集合对象 => Set(6) {1, 2, "2", 3, 4, 5}
+```
+
+### map结构
+
+Map 是 ES6 中新增的**数据结构**，Map 类似于对象，但普通对象的 key 必须是[字符串](https://so.csdn.net/so/search?q=字符串&spm=1001.2101.3001.7020)或者数字，而 Map 的 key 可以是任何数据类型…
+Map 的用法和普通对象基本一致，先看一下它能用非字符串或者数字作为 key 的特性。
+
+```
+const map = new Map();
+const obj = {p: 'Hello World'};
+
+map.set(obj, 'OK')
+map.get(obj) // "OK"
+
+map.has(obj) // true
+map.delete(obj) // true
+map.has(obj) // false
+```
+
+### Set、Map的区别
+
+应用场景Set用于数据重组，Map用于数据储存
+
+**Set：**
+1，成员不能重复
+2，只有键值没有键名，类似数组
+3，可以遍历，方法有add, delete,has
+
+**Map:**
+1，本质上是健值对的集合，类似集合
+2，可以遍历，可以跟各种数据格式转换
+
+## 其他
+
+### **什么样的前端代码是好的？**
+
+高复用低耦合，这样文件小，好维护，而且好扩展
+
+**对前端工程师这个职位是怎么样理解的？**
+
+前端是最贴近用户的程序员，
+
+- 实现界面交互
+- 提升用户体验
+- 有了Node.js，前端可以实现服务端的一些事情
