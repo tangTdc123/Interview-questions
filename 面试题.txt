@@ -22,6 +22,47 @@ Viewprot翻译为中文可以叫做“视区”。
 <mate name='viewport' content='width=device-width;initial-scale=1.0;maximum-scale=1;user-scalable=no'>
 ```
 
+## 性能优化
+
+### HTML优化
+
+```
+1、避免 HTML 中书写 CSS 代码，因为这样难以维护。
+2、使用 Viewport 加速页面的渲染。
+3、使用语义化标签，减少 CSS 代码，增加可读性和 SEO。
+4、减少标签的使用，DOM 解析是一个大量遍历的过程，减少不必要的标签，能降低遍历的次数。
+5、避免 src、href 等的值为空，因为即时它们为空，浏览器也会发起 HTTP 请求。
+6、减少 DNS 查询的次数（更改TTL值以利用DNS缓存）
+```
+
+### CSS优化
+
+```
+1、优化选择器路径：使用 .c {} 而不是 .a .b .c {}。
+2、选择器合并：共同的属性内容提起出来，压缩空间和资源开销。
+3、精准样式：使用 padding-left: 10px 而不是 padding: 0 0 0 10px。
+4、雪碧图：将小的图标合并到一张图中，这样所有的图片只需要请求一次。
+5、避免通配符：.a .b * {} 这样的选择器，根据从右到左的解析顺序在解析过程中遇到通配符 * {} 会遍历整个 DOM，性能大大损耗。
+6、少用 float：float 在渲染时计算量比较大，可以使用 flex 布局。
+7、为 0 值去单位：增加兼容性。
+8、压缩文件大小，减少资源下载负担。（比如删除空格、去掉换行、去掉多余分号等）
+```
+
+### JavaScript优化
+
+```
+1、尽可能把 <script> 标签放在 body 之后，避免 JS 的执行卡住 DOM 的渲染，最大程度保证页面尽快地展示出来
+（如果放在上面，将js包裹在$(document).ready(function(){})或者$(function(){})里面
+,或者window.onload=function(){}里面。）//不建议 额外操作
+2、尽可能合并 JS 代码：提取公共方法，进行面向对象设计等……
+3、CSS 能做的事情，尽量不用 JS 来做，毕竟 JS 的解析执行比较粗暴，而 CSS 效率更高。
+4、尽可能逐条操作 DOM，并预定好 CSs 样式，从而减少 reflow 或者 repaint 的次数。
+5、尽可能少地创建 DOM，而是在 HTML 和 CSS 中使用 display: none 来隐藏，按需显示。
+6、压缩文件大小，减少资源下载负担。
+```
+
+**对于DOM结构中的各个元素都有自己的盒子（模型），这些都需要浏览器根据各种样式（浏览器的、开发人员定义的等）来计算并根据计算结果将元素放到它该出现的位置，这个过程称之为reflow；当各种盒子的位置、大小以及其他属性，例如颜色、字体大小等都确定下来后，浏览器于是便把这些元素都按照各自的特性绘制了一遍，于是页面的内容出现了，这个过程称之为repaint。**
+
 
 
 ## CSS
@@ -125,6 +166,167 @@ border-radius：圆角
 意味"弹性布局"，任何一个容器都可以指定为Flex布局
 
 文档https://juejin.cn/post/6844903906925887502
+
+### 清除浮动的4种方式
+
+#### **一、 额外标签法：**
+
+ 给谁清除浮动，就在其后额外添加一个空白标签 。
+**优点：** 通俗易懂，书写方便。（`不推荐使用`）
+**缺点：** 添加许多无意义的标签，结构化比较差。
+
+给元素small清除浮动（在small后添加一个空白标签clear(类名可以随意），设置clear:both;即可）
+
+```
+
+<div class="fahter">
+        <div class="big">big</div>
+        <div class="small">small</div>
+        <div class="clear">额外标签法</div>
+</div>
+.clear{
+        clear:both;
+    }
+```
+
+#### **二、 父级添加overflow方法：**
+
+可以通过触发BFC的方式，实现清楚浮动效果。必须定义width或zoom:1，同时不能定义height，使用overflow:hidden时，浏览器会自动检查浮动区域的高度
+
+优点： 简单、代码少、浏览器支持好
+
+缺点： 内容增多时候容易造成不会自动换行导致内容被隐藏掉，无法显示需要溢出的元素。不能和position配合使用，因为超出的尺寸的会被隐藏。
+
+注意： 别加错位置，是给父亲加（并不是所有的浮动都需要清除，谁影响布局，才清除谁。）
+
+```
+.fahter{
+    width: 400px;
+    border: 1px solid deeppink;
+    overflow: hidden;
+}
+```
+
+#### **三、使用after伪元素清除浮动：**
+
+ :after方式为空元素的升级版，好处是不用单独加标签了。IE8以上和非IE浏览器才支持:after，，zoom(IE专有属性)可解决ie6,ie7浮动问题（较常用推荐）
+
+优点： 符合闭合浮动思想，结构语义化正确，不容易出现怪问题（目前：大型网站都有使用，如：腾迅，网易，新浪等等）
+
+缺点： 由于IE6-7不支持：after，使用zoom：1
+
+```
+
+.clearfix:after{/*伪元素是行内元素 正常浏览器清除浮动方法*/
+        content: "";
+        display: block;
+        height: 0;
+        clear:both;
+        visibility: hidden;
+    }
+    .clearfix{
+        *zoom: 1;/*ie6清除浮动的方式 *号只有IE6-IE7执行，其他浏览器不执行*/
+    }
+ 
+<body>
+    <div class="father clearfix">
+        <div class="big">big</div>
+        <div class="small">small</div>
+        <!--<div class="clear">额外标签法</div>-->
+    </div>
+    <div class="footer"></div>
+</body>
+```
+
+#### **四、使用before和after双伪元素清除浮动：**（`较常用推荐`）
+
+**优点：** 代码更简洁
+
+```
+<style>
+            .father{
+                border: 1px solid black;
+                *zoom: 1;
+            }
+            .clearfix:after,.clearfix:before{
+                   content: "";
+                   display: block;
+                   clear: both;
+               }
+               .big ,.small{
+                width: 200px;
+                height: 200px;
+                float: left;
+               }
+               .big{
+                background-color: red;
+               }
+               .small{
+                background-color: blue;
+               }
+        </style>
+   <div class="father clearfix">
+        <div class="big">big</div>
+        <div class="small">small</div>
+   </div>
+    <div class="footer"></div>
+ 
+</div>
+```
+
+#### 五、父级div手动定义height，
+
+就解决了父级div无法自动获取到高度的问题。
+
+**优点：** 简单、代码少、容易掌握
+
+**缺点：** 只适合高度固定的布局，要给出精确的高度，如果高度和父级div不一样时，会产生问题
+
+### Position
+
+position的含义是指定位类型，取值类型可以有：`static`、`relative`、`absolute`、`fixed`、`inherit`和`sticky`，这里sticky是[CSS3](https://so.csdn.net/so/search?q=CSS3&spm=1001.2101.3001.7020)新发布的一个属性。
+
+#### 1、 static
+
+static(没有定位)是position的默认值，元素处于正常的文档流中，会忽略left、top、right、bottom和z-index属性。
+
+#### 2、relative
+
+relative(相对定位)是指给元素设置相对于原本位置的定位，元素并不脱离文档流，因此元素原本的位置会被保留，其他的元素位置不会受到影响。
+
+#### 3、absolute
+
+absolute(绝对定位)是指给元素设置绝对的定位，相对定位的对象可以分为两种情况：
+
+1) 设置了absolute的元素如果存在有祖先元素设置了position属性为relative或者absolute，则这时元素的定位对象为此已设置position属性的祖先元素。
+
+2) 如果并没有设置了position属性的祖先元素，则此时相对于body进行定位。
+
+#### 4、fixed
+
+可以简单说fixed是特殊版的absolute，fixed元素总是相对于body定位的。
+
+#### 5、inherit
+
+继承父元素的position属性，但需要注意的是IE8以及往前的版本都不支持inherit属性。
+
+#### 6、sticky (黏性定位,吸顶效果)
+
+position属性中最有意思的就是sticky了，设置了sticky的元素，在屏幕范围（viewport）时该元素的位置并不受到定位影响（设置是top、left等属性无效），当该元素的位置将要移出偏移范围时，定位又会变成fixed，根据设置的left、top等属性成固定位置的效果。
+
+### 浏览器兼容性问题
+
+> 不同浏览器的内核不尽相同，所以各个浏览器对网页的解析存在一定的差异。
+> 浏览器内核主要分为两种，一是渲染引擎，另一个是js 引擎
+> 所以浏览器兼容性问题一般指：css兼容、js兼容
+
+文档https://blog.csdn.net/weixin_43638968/article/details/109177674
+
+### CSS Hack
+
+一般来说是针对不同的浏览器写不同的CSS,就是 CSS Hack。
+CSS Hack常见的有三种形式：
+属性Hack、选择符Hack、条件注释Hack， Hack主要针对IE浏览器
 
 ## JS
 
@@ -271,6 +473,22 @@ for(let i = 0; i < 3; i++) {
 ​	没有及时清理的计时器或者回调函数
 
 ​	闭包
+
+### 垃圾回收机制
+
+Collecation)，也就是说，执行环境会负责管理代码执行过程中使用的内存。其原理是：垃圾收集器会定期（周期性）找出那些不在继续使用的变量，然后释放其内存。但是这个过程不是实时的，因为其开销比较大并且GC时停止响应其他操作，所以垃圾回收器会按照固定的时间间隔周期性的执行。
+
+#### 标记清除
+
+js中最常用的垃圾回收方式就是标记清除。当变量进入环境时，例如，在函数中声明一个变量，就将这个变量标记为“进入环境”。从逻辑上讲，永远不能释放进入环境的变量所占用的内存，因为只要执行流进入相应的环境，就可能会用到它们。而当变量离开环境时，则将其标记为“离开环境”。
+
+浏览器的 Javascript 具有自动垃圾回收机制(GC:Garbage 
+
+引用计数的含义是跟踪记录每个值被引用的次数。当声明了一个变量并将一个引用类型值赋给该变量时，则这个值的引用次数就是1。如果同一个值又被赋给另一个变量，则该值的引用次数加 1。相反，如果包含对这个值引用的变量又取得了另外一个值，则这个值的引用次数减 1。当这个值的引用次数变成 0 时，则说明没有办法再访问这个值了，因而就可以将其占用的内存空间回收回来。这样，当垃圾回收器下次再运行时，它就会释放那些引用次数为 0 的值所占用的内存。
+
+
+
+## 引用计数
 
 ### 回调函数
 
@@ -428,7 +646,9 @@ btn1Obj.attachEvent("onclick",method2);
 btn1Obj.attachEvent("onclick",method3);执行顺序为method3->method2->method1
 ```
 
+### Diff 算法
 
+Diff 算法探讨的就是虚拟 DOM 树发生变化后，生成 DOM 树更新补丁的方式。对比新旧两株虚拟 DOM 树的变更差异，将更新补丁作用于真实 DOM，以最小成本完成视图更新。
 
 ## HTTP网络
 
@@ -544,48 +764,19 @@ DNS(Domain Name System)译为 域名系统，它是 Internet 的一项核心服�
 
  DNS主要用于映射主机名和IP地址，就好像身份证对应一个人一样，当你搜索 www.baidu.com 时，域名需要发送到DNS服务器解析，然后返回服务器主机的IP地址到客户端，客户端再发送IP地址到服务器主机请求。但是DNS解析是有时间消耗的，一般一次解析需要 20 ~ 120 毫秒。
 
-## 性能优化
+### Access-Control-Allow-Origin为*前端不能携带cookie
 
-### HTML优化
+XMLHttpRequest 的 withCredentials 标志设置为 true，是为了客户端向服务端发送cookie，
 
-```
-1、避免 HTML 中书写 CSS 代码，因为这样难以维护。
-2、使用 Viewport 加速页面的渲染。
-3、使用语义化标签，减少 CSS 代码，增加可读性和 SEO。
-4、减少标签的使用，DOM 解析是一个大量遍历的过程，减少不必要的标签，能降低遍历的次数。
-5、避免 src、href 等的值为空，因为即时它们为空，浏览器也会发起 HTTP 请求。
-6、减少 DNS 查询的次数（更改TTL值以利用DNS缓存）
-```
+响应中Access-Control-Allow-Credentials: true，是为了客户端能够接收cookie，无此标记，浏览器将不会把响应内容返回给请求的发送者。
 
-### CSS优化
+因此，前端要携带cookie到服务端，需要三个条件：
 
-```
-1、优化选择器路径：使用 .c {} 而不是 .a .b .c {}。
-2、选择器合并：共同的属性内容提起出来，压缩空间和资源开销。
-3、精准样式：使用 padding-left: 10px 而不是 padding: 0 0 0 10px。
-4、雪碧图：将小的图标合并到一张图中，这样所有的图片只需要请求一次。
-5、避免通配符：.a .b * {} 这样的选择器，根据从右到左的解析顺序在解析过程中遇到通配符 * {} 会遍历整个 DOM，性能大大损耗。
-6、少用 float：float 在渲染时计算量比较大，可以使用 flex 布局。
-7、为 0 值去单位：增加兼容性。
-8、压缩文件大小，减少资源下载负担。（比如删除空格、去掉换行、去掉多余分号等）
-```
+**1. Access-Control-Allow-Origin不能为*，应为具体域名**
 
-### JavaScript优化
+**2. 服务端Access-Control-Allow-Credentials应为true**
 
-```
-1、尽可能把 <script> 标签放在 body 之后，避免 JS 的执行卡住 DOM 的渲染，最大程度保证页面尽快地展示出来
-（如果放在上面，将js包裹在$(document).ready(function(){})或者$(function(){})里面
-,或者window.onload=function(){}里面。）//不建议 额外操作
-2、尽可能合并 JS 代码：提取公共方法，进行面向对象设计等……
-3、CSS 能做的事情，尽量不用 JS 来做，毕竟 JS 的解析执行比较粗暴，而 CSS 效率更高。
-4、尽可能逐条操作 DOM，并预定好 CSs 样式，从而减少 reflow 或者 repaint 的次数。
-5、尽可能少地创建 DOM，而是在 HTML 和 CSS 中使用 display: none 来隐藏，按需显示。
-6、压缩文件大小，减少资源下载负担。
-```
-
-**对于DOM结构中的各个元素都有自己的盒子（模型），这些都需要浏览器根据各种样式（浏览器的、开发人员定义的等）来计算并根据计算结果将元素放到它该出现的位置，这个过程称之为reflow；当各种盒子的位置、大小以及其他属性，例如颜色、字体大小等都确定下来后，浏览器于是便把这些元素都按照各自的特性绘制了一遍，于是页面的内容出现了，这个过程称之为repaint。**
-
-
+**3. 客户端XMLHttpRequest 的 withCredentials=true**
 
 ## Vue
 
@@ -656,7 +847,7 @@ v-show是css切换，通过display：none进行切换
 
 v-if是完整的销毁和重新创建
 
-v-show会在渲染的时候就生成  dom ，哪怕等于false也会占位。
+v-show会在渲染的时候就生成  dom 
 
 而v-if是在等于true的时候创建  
 
@@ -770,6 +961,18 @@ CDN 的使用
 使用 Chrome Performance 查找性能瓶颈
 
 ```
+
+### MVVM
+
+![img](https://upload-images.jianshu.io/upload_images/13038962-96704c499078e5b7.png?imageMogr2/auto-orient/strip|imageView2/2/w/560/format/webp)
+
+当用户操作 View，ViewModel 感知到变化，然后通知 Model 发生相应改变；反之当 Model 发生改变，ViewModel 也能感知到变化，使 View 作出相应更新。
+
+MVVM实现原理
+
+![image-20220529123807710](C:\Users\tdc520\AppData\Roaming\Typora\typora-user-images\image-20220529123807710.png)
+
+
 
 ## ES6
 
@@ -968,3 +1171,9 @@ map.has(obj) // false
 - 实现界面交互
 - 提升用户体验
 - 有了Node.js，前端可以实现服务端的一些事情
+
+### 面试题
+
+**以及其他面试题https://blog.csdn.net/weixin_43638968/article/details/107518108**
+
+https://q.shanyue.tech/
